@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>chtp</title>
+  
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: rgba(51, 51, 51, 0.8);
+            color: white;
+        }
+        #chat-box {
+            width: 400px;
+            height: 500px;
+            border: 2px solid #000;
+            border-radius: 10px;
+            background: #FFB6C1;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: black;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: thin;
+            scrollbar-color: #ff69b4 #f0f0f0;
+        }
+        #chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chat-box::-webkit-scrollbar-thumb {
+            background-color: #ff69b4;
+            border-radius: 10px;
+        }
+        #chat-box::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: 400px;
+        }
+        #message-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            border: 2px solid #000;
+            border-radius: 5px;
+            padding: 10px 15px;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: green;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .message {
+            border: 2px solid black;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            background-color: white;
+            color: black;
+            max-width: 80%;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: lightblue;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Online <span class="status-dot"></span></h1>
+    <div id="chat-box"></div>
+    <div class="input-container">
+        <input type="text" id="message-input" placeholder="Escribe un mensaje...">
+        <button onclick="sendMessage()">Enviar</button>
+        <button onclick="sendMedia()">📎</button>
+    </div>
+    <input type="file" id="file-input" style="display: none;" accept="image/*,video/*" onchange="handleMedia()">
+
+    <script>
+        function sendMessage() {
+            let input = document.getElementById('message-input');
+            let message = input.value.trim();
+            if (message !== '') {
+                let chatBox = document.getElementById('chat-box');
+                let userMessage = document.createElement('div');
+                userMessage.classList.add('message', 'user-message');
+                userMessage.textContent = "Tú: " + message;
+                chatBox.appendChild(userMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                input.value = '';
+                
+                setTimeout(() => {
+                    let botMessage = document.createElement('div');
+                    botMessage.classList.add('message', 'bot-message');
+                    botMessage.textContent = "Bot: Hola, ¿cómo puedo ayudarte?";
+                    chatBox.appendChild(botMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function sendMedia() {
+            document.getElementById('file-input').click();
+        }
+
+        function handleMedia() {
+            let fileInput = document.getElementById('file-input');
+            let file = fileInput.files[0];
+            if (file) {
+                let chatBox = document.getElementById('chat-box');
+                let mediaElement;
+
+                if (file.type.startsWith('image/')) {
+                    mediaElement = document.createElement('img');
+                    mediaElement.src = URL.createObjectURL(file);
+                    mediaElement.style.maxWidth = '200px';
+                    mediaElement.style.border = '2px solid black';
+                    mediaElement.style.borderRadius = '5px';
+                } else if (file.type.startsWith('video/')) {
+                    mediaElement = document.createElement('video');
+                    mediaElement.src = URL.createObjectURL(file);
+                    mediaElement.controls = true;
+                    mediaElement.style.maxWidth = '200px';
+                    mediaElement.style.border = '2px solid black';
+                    mediaElement.style.borderRadius = '5px';
+                }
+
+                if (mediaElement) {
+                    let userMessage = document.createElement('div');
+                    userMessage.classList.add('message', 'user-message');
+                    userMessage.appendChild(mediaElement);
+                    chatBox.appendChild(userMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+<!-- partial -->
+  
+</body>
+</html>
